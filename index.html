@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DragonOS - Getting Started</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="./static/bootstrap.min.css" rel="stylesheet">
+  <link href="./static/prism.css" rel="stylesheet">
+  <style>
+    .terminal {
+      background-color: #2d2d2d;
+      color: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      border-radius: 0.5rem;
+    }
+    .floating-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="./static/dragon-2.png" alt="Bootstrap" class="img-fluid" width="80" height="80">
+        <span class="fw-bold">DRAGON</span>OS
+      </a>
+      <h5 class="fw-bold text-success">DragonOS_Pi64_R36 (aarch64 22.04)</h5>
+    </div>
+  </nav>
+  <div class="container mt-5" id="content">
+    <div class="row">
+      <div class="col-sm-12">
+        <h1 class="text-center">Getting Started</h1>
+        <p class="text-center fw-italic">Thank you for using DragonOS on the Raspberry Pi.</p>
+        <div class="d-flex justify-content-center align-items-center gap-2">
+          <a href="https://sourceforge.net/projects/dragonos-pi64/">Dragonos pi64</a>
+          <a href="https://x.com/cemaxecuter">@cemaxecuter</a>
+          
+        </div>
+      </div>
+    <hr>
+    <div class="col-md-12 my-5">
+      <h4 class="text-center">Index</h4>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><a href="#intro">Notes</a></li>
+        <li class="list-group-item"><a href="#sdrplay">SDRPlay</a></li>
+        <li class="list-group-item"><a href="#soapy">Soapy Remote Server</a></li>
+        <li class="list-group-item"><a href="#bladerf">BladeRFxA9</a></li>
+        <li class="list-group-item"><a href="#gpssimulator">GpsSimulator</a></li>
+        <li class="list-group-item"><a href="#sdrangel">SDRAngel</a></li>
+        <li class="list-group-item"><a href="#networkmanager">Network Manager</a></li>
+        <li class="list-group-item"><a href="#gr-iridium">GR-Iridium</a></li>
+        <li class="list-group-item"><a href="#satdump">Satdump</a></li>
+        <li class="list-group-item"><a href="#hdmi">HDMI Dummy Plug</a></li>
+        <li class="list-group-item"><a href="#about">About</a></li>
+      </ul>
+    </div>
+    <div class="col-sm-12" id="intro">
+      <h2>A few important notes</h2>
+      <div class="ms-3 mt-2">
+      <ul class="list-group list-group-flush list-group-numbered">
+        <li class="list-group-item">Change the default ubuntu password and configure firewall/shh as needed.</li>
+        <li class="list-group-item">Raspi-config is in the standard Ubuntu 22.04 repos, but the only feature tested is the sdcard expansion ability. You may find that some of the other options work, but they have not been tested by me. </li>
+        <li class="list-group-item">If you'd like to remotely connect using RealVNC, then I recommend using RealVNC Viewer. </li>
+        <li class="list-group-item">If you use SDRTrunk, disable the waterfall once you have it setup. This will save a lot of processing power.</li>
+        <li class="list-group-item">Open the Audio Mixer when running applications like SDR++, click the Playback tab and switch between the drop down audio options to switch between the headphone jack or the HDMI port closest to the power jack. You can also use the configuration tab to turn on/off either device, that should prevent you from having to select between the two options on the Playback tab.</li>
+        <li class="list-group-item">If you want to use the hackRF with the SDR++ hackRF module and not the soapy module, open up SDR++ and remove the soapy module using the module manager. Close and reopen SDR++. The hackRF will then work with the hackRF input module.</li>
+        <li class="list-group-item">Place "config.txt" changes (dtparam, dtoverlay, disable_overscan, etc.) in <span class="badge text-bg-secondary">/boot/firmware/config.txt.</span></li>
+      </ul>
+    </div>
+    
+    </div>
+    <hr>
+    <div class="col-sm-12">
+      <h2>Configuration</h2>
+      <br>
+      <div class="ms-3 mt-2" id="sdrplay">
+        <h3>SDRPlay support</h3>
+        <div class="card terminal">
+          <div class="card-header text-center">Installing SDRplay_RSP_API-Linux-3</div>
+          <div class="card-body">
+            <pre><code class="shell-session">
+cd /usr/src
+./SDRplay_RSP_API-Linux-3.15.2.run
+  </code></pre>
+          </div>
+        </div>
+        <div class="alert alert-warning d-flex align-items-center mt-2" role="alert">
+          <div>
+            Without this installed, SDRPlay equipment will be unusable and you'll also see an <strong>SDRPlay error</strong> (not an issue) when running some things that look for soapy components.
+          </div>
+        </div>
+      </div>
+      
+      <div class="ms-3 mt-2" id="soapy">
+        <h3>SOAPY Remote Server</h3>
+        <p><span class="badge text-bg-secondary">soapyremote-server.service</span> is disabled by default and is needed for sharing SDRs on the LAN.</p>
+        <div class="card terminal">
+          <div class="card-header text-center">Enable SOAPY remote server</div>
+          <div class="card-body">
+            <pre><code class="shell-session">
+sudo systemctl enable serviceName
+sudo systemctl start serviceName
+  </code></pre>
+          </div>
+        </div>
+        <p>Will both enable the service by default on next reboot and start it in the current session</p>
+      </div>
+      
+      <div class="ms-3 mt-2" id="bladerf">
+        <h3>BladeRFxA9</h3>
+        <div class="alert alert-danger d-flex align-items-center mt-2" role="alert">
+          <div>Not working with 6.5 kernel</div>
+        </div>
+        <p>Any time the kernel is upgraded, you'll need to perform the following if you intend to use the <span class="badge text-bg-secondary">bladeRFxA9 mac80211e</span> setup. You'll need the modules installed for the kernel you upgraded to, along with headers. Change the <strong>5.15.0-1024</strong> to match whichever kernel you have.  </p>
+        <div class="card terminal">
+          <div class="card-header text-center">BladeRFxA9</div>
+          <div class="card-body">
+            <pre><code class="shell-session">
+cd /usr/src/wiphy-build/bladeRF-mac80211_hwsim
+sudo ln -s /usr/src/linux-headers-5.15.0-1024-raspi/ /lib/modules/5.15.0-1024-raspi/build
+sudo make -C /lib/modules/5.15.0-1024-raspi/build M=$PWD
+  </code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="ms-3 mt-2" id="gpssimulator">
+        <h3>GpsSimulator</h3>
+        <p>For GpsSimulator usage, it most likely will require an external clock for the HackRF. Also, you may need to edit the file  <span class="badge text-bg-secondary">/etc/security/limits.conf</span> and add the following line to the end:
+        <span class="badge text-bg-secondary">ubuntu - rtprio - max realtime priority</span></p>
+        <div class="alert alert-primary d-flex align-items-center mt-2" role="alert">
+          Ensure you log out of the ubuntu account and log back in before using the appliance. You also need to flash the HackRF with a special firmware.
+        </div>
+      </div>
+
+      <div class="ms-3 mt-2" id="sdrangel">
+        <h3>SDRAngel</h3>
+        <p>Load times can be drastically reduced by first opening a terminal and running the following command. <strong>This only needs to be done once.</strong></p>
+        <div class="card terminal">
+          <div class="card-header text-center">SDRAngel</div>
+          <div class="card-body">
+            <pre><code class="shell-session">
+fftwf-wisdom -n -o /home/ubuntu/.local/share/f4exb/SDRangel/fftw-wisdom 128 256 512 1024 2048 4096 8192
+  </code></pre>
+          </div>
+        </div>
+        <div class="alert alert-primary d-flex align-items-center mt-2" role="alert">
+          Be patient, it takes awhile to generate the file.
+        </div>
+        
+      </div>
+
+      <div class="ms-3 mt-2" id="networkmanager">
+        <h3>Update to Network Manager</h3>
+        <p>If you happen to get an update to Network Manager and find that your ethernet port is no longer managed, then as <span class="text-danger">root</span>, edit <span class="badge text-bg-secondary">/etc/NetworkManager/NetworkManager.conf</span> to match the following.</p>
+        <div class="card terminal">
+          <div class="card-header text-center">Network Manager</div>
+          <div class="card-body">
+          <pre><code class="shell-session">
+[main]
+plugins=ifupdown,keyfile
+
+[ifupdown]
+managed=true
+
+[keyfile]
+unmanaged-devices=*,except:type:wifi,except:type:gsm,except:type:cdma,except:type:wwan,except:type:ethernet,except:type:vlan
+
+[device]
+wifi.scan-rand-mac-address=no
+  </code></pre>
+          </div>
+        </div>
+        <br>
+        <p>You can use the following commands to save and restart the service.</p>
+        <div class="card terminal">
+          <div class="card-header text-center">Network Manager</div>
+          <div class="card-body">
+            <pre><code class="shell-session">
+sudo nano /etc/NetworkManager/NetworkManager.conf
+sudo systemctl restart network-manager
+  </code></pre>
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="ms-3 mt-2" id="gr-iridium">
+        <h3>GR-Iridium not working</h3>
+        <p>If after upgrading system packages you find that gr-iridium/iridium-extractor has an error while trying to start such as <span class="badge text-bg-secondary">undefined symbol: _ZN2gr7iridium16fft_burst_tagger4makeEdiiiiiiifibb. </span> Perform either of the following:</p>
+        <p><strong>Keep version</strong></p>
+        <div class="card terminal">
+          <div class="card-header text-center">Keep the same version gr-iridium</div>
+          <div class="card-body">
+          <pre><code class="shell-session">
+cd /usr/src/gr-iridium/
+sudo cmake --install build
+  </code></pre>
+          </div>
+        </div>
+        <br>
+        <p><strong>Upgrade version</strong></p>
+        <div class="card terminal">
+          <div class="card-header text-center">Upgrade version gr-iridium</div>
+          <div class="card-body">
+            <pre><code class="shell-session">
+cd /usr/src/gr-iridium/
+sudo git fetch origin
+sudo git merge origin/master
+sudo rm -rf build
+sudo cmake -B build
+sudo cmake --build build
+sudo cmake --install build
+  </code></pre>
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="ms-3 mt-2" id="satdump">
+        <h3>Satdump</h3>
+        <p>Satdump may require a modified shortcut for the Pi3 if the satdump-ui fails to start. Open and edit <span class="badge text-bg-secondary">/usr/share/applications/satdump.desktop</span> to look like this:</p>
+        <div class="card terminal">
+          <div class="card-header text-center">Keep the same version gr-iridium</div>
+          <div class="card-body">
+          <pre><code class="shell-session">
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Exec=sh -c "MESA_GL_VERSION_OVERRIDE=4.5 /usr/bin/satdump-ui"
+Name=SatDump
+Icon=/usr/share/satdump/icon
+  </code></pre>
+          </div>
+        </div>
+        <div class="alert alert-warning d-flex align-items-center mt-2" role="alert">
+         <p> Also note that Satdump may
+          fail to render the waterfall on the Pi4 with <span class="fw-bold">dtoverlay=vc4-kms-v3d</span> enabled. Refer to 16 to see
+          where/how to disable this.</p>
+        </div>
+      </div>
+
+
+      <div class="ms-3 mt-2" id="hdmi">
+        <h3>HDMI Dummy Plug</h3>
+        <p>To enable headless operation and still use RealVNC to login without 
+          needing a "HDMI Dummy Plug", open and edit the below two sections in <span class="badge text-bg-secondary">/boot/firmware/config.txt</span> Save and reboot. to look like this:</p>
+        <div class="card terminal">
+          <div class="card-header text-center">HDMI Dummy Plug</div>
+          <div class="card-body">
+          <pre><code class="shell-session">
+#Next is for headless usage only (no HDMI connected) and 1080P resolution
+hdmi_force_mode=1
+hdmi_group=2
+hdmi_mode=82
+
+[all]
+
+# Enable the KMS ("full" KMS) graphics overlay, leaving GPU memory as the
+# default (the kernel is in control of graphics memory with full KMS)
+#Comment the below line for headless usage
+# dtoverlay=vc4-kms-v3d
+
+17. If a Kernel upgrade is performed the rtl8812au driver may no longer function. Go into /usr/src/rtl8812au/ and run sudo make uninstall. You may need to then run sudo make clean followed by sudo make && sudo make install.
+
+18. To add Cariboulite support do the following
+sudo cp /usr/src/firmware/cariboulite/libSoapyCariboulite.so /usr/lib/aarch64-linux-gnu/SoapySDR/modules0.8/
+
+Also keep in mind that if you upgrade the kernel you'll have to rebuild the smi kernel module, which basically means you'll have to pull the source code from the CaribouLite github page and rebuild using the install.sh script or for advanced users you can rebuild just the relevant packages related to the kernel module. 
+
+You'll also need to setup SPI and i2c. 
+sudo nano /boot/firmware/config.txt
+find this section and make it look like this
+
+[all]
+# Enable the audio output, I2C and SPI interfaces on the GPIO header. As these
+# parameters related to the base device-tree they must appear *before* any
+# other dtoverlay= specification
+dtparam=audio=on
+dtparam=i2c_arm=off
+dtparam=spi=off
+dtparam=i2c_vc=on
+  </code></pre>
+          </div>
+        </div>
+        <br>
+        <p>Save the file and reboot the Pi (with hat installed) and you should be able to see it by running  <span class="badge text-bg-secondary">sudo SoapySDRUtil --find</span>. Notice that really anything that uses the hat will need to run with sudo, which actually causes problems with pulse audio and other things. </p>
+      </div>
+
+    </div>
+    <hr>
+    <div class="col-sm-12" id="about">
+      <h2>What is DragonOS?</h2>
+      <p>The shortest distance between two points is a straight line. DragonOS is the straight line between you and Software Defined Radio! It leverages the portability, security, and power of Lubuntu Linux as a delivery package and operating environment for a pre-installed suite of the most powerful and accessible open source SDR software. DragonOS has verified support for a range of inexpensive and powerful SDR hardware, including RTL-SDR, HackRF One, LimeSDR, BladeRF, and many others.</p>
+    </div>
+    </div>
+  </div>
+  <a href="#content" class="btn rounded-circle floating-btn">
+    <img src="./static/dragon-2.png" alt="Bootstrap" class="img-fluid" width="80" height="80">
+  </a>
+  <script src="./static/bootstrap.bundle.min.js"></script>
+  <script src="./static/prism.js"></script>
+</body>
+</html>
