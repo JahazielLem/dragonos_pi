@@ -71,6 +71,7 @@
         <li class="list-group-item">Open the Audio Mixer when running applications like SDR++, click the Playback tab and switch between the drop down audio options to switch between the headphone jack or the HDMI port closest to the power jack. You can also use the configuration tab to turn on/off either device, that should prevent you from having to select between the two options on the Playback tab.</li>
         <li class="list-group-item">If you want to use the hackRF with the SDR++ hackRF module and not the soapy module, open up SDR++ and remove the soapy module using the module manager. Close and reopen SDR++. The hackRF will then work with the hackRF input module.</li>
         <li class="list-group-item">Place "config.txt" changes (dtparam, dtoverlay, disable_overscan, etc.) in <span class="badge text-bg-secondary">/boot/firmware/config.txt.</span></li>
+        <li class="list-group-item">Install Jaero (SatCom ACARS demodulator and decoder for the Aero standard) <a href="https://drive.google.com/drive/folders/1G89TOoGwj5n91DLjbp8R3MSbzXaUMnQ-">Link to drive</a> <span class="badge text-bg-success">new</span></li>
       </ul>
     </div>
     
@@ -79,6 +80,30 @@
     <div class="col-sm-12">
       <h2>Configuration</h2>
       <br>
+
+      <div class="ms-3 mt-2" id="openwebrx">
+        <h3>OpenWebRx+ <span class="badge badge-sm text-bg-success">New</span></h3>
+        <div class="card terminal">
+          <div class="card-header text-center">Installing SDRplay_RSP_API-Linux-3</div>
+          <div class="card-body">
+            <pre><code class="shell-session">
+# Run this prior to installing it
+sudo apt install --reinstall python3-pkg-resources python3-setuptools.
+# Then run the apt install command (Debian)
+wget -O /usr/share/keyrings/openwebrx.gpg https://repo.openwebrx.de/openwebrx.gpg
+echo "deb [signed-by=/usr/share/keyrings/openwebrx.gpg] https://repo.openwebrx.de/debian/ bullseye main" > /etc/apt/sources.list.d/openwebrx.list
+apt-get update
+apt-get install openwebrx
+  </code></pre>
+          </div>
+        </div>
+        <div class="alert alert-info d-flex align-items-center mt-2" role="alert">
+          <div>
+            For more information follow the installation guide from <a href="https://github.com/jketterl/openwebrx/wiki/Setup-Guide">OpenWebRx repo</a>.
+          </div>
+        </div>
+      </div>
+
       <div class="ms-3 mt-2" id="sdrplay">
         <h3>SDRPlay support</h3>
         <div class="card terminal">
@@ -300,6 +325,11 @@ dtparam=i2c_vc=on
     <div class="col-sm-12" id="about">
       <h2>What is DragonOS?</h2>
       <p>The shortest distance between two points is a straight line. DragonOS is the straight line between you and Software Defined Radio! It leverages the portability, security, and power of Lubuntu Linux as a delivery package and operating environment for a pre-installed suite of the most powerful and accessible open source SDR software. DragonOS has verified support for a range of inexpensive and powerful SDR hardware, including RTL-SDR, HackRF One, LimeSDR, BladeRF, and many others.</p>
+    </div>
+    <hr>
+    <div class="col-sm-12 text-center">
+      Documentation and support for DragonOs is provided by the community. If you have questions, suggestions, or issues, please reach out to us on our <a href="https://x.com/cemaxecuter">@cemaxecuter</a> account. We are always looking for ways to improve the experience and welcome your feedback.</p>
+      <p class="text-muted">Wiki Version: 0.0.2</p>
     </div>
     </div>
   </div>
